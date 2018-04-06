@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bogus;
 using MassTransit;
 using ShipABox.Common.Contracts.Events;
 
@@ -9,28 +8,45 @@ namespace ShipABox.Clerk.BoxSender.Consumer
     internal class ClerkProvidedTrackingNumberConsumer :
         IConsumer<IClerkProvidedTrackingNumberEvent>
     {
-
         /**
          *  CustomerPayedInvoiceConsumer
          *
          *  -   Defines how to consume the event's message.
          *
          *  -   Publishes another event when this microservice is done,
-         *      signaling the start of next unit of work for the next service.
+         *      signaling the start of next unit of work for the next
+         *      service.
          */
 
+
+        /**
+         *  Message template for console.
+         */
+        private const string StrOut = "Delivery expected by: {0}";
+
+
+        /**
+         *  Required interface implementation.
+         */
         public async Task Consume(
             ConsumeContext<IClerkProvidedTrackingNumberEvent> context)
         {
-            // setup
+            /**
+             *  Setup.
+             */
             var timestampBoxLeftFacility = DateTimeOffset.Now;
 
-            // console out to user
-            var strOut = "Delivery expected by: {0}";
-            Console.WriteLine(
-                strOut, context.Message.TimestampDeliveryExpected);
 
-            // publish event
+            /**
+             *  Console out to user.
+             */
+            Console.WriteLine(
+                StrOut, context.Message.TimestampDeliveryExpected);
+
+
+            /**
+             *  Publish event.
+             */
             await context.Publish<IClerkSentBoxEvent>(
                 new
                 {
@@ -62,6 +78,7 @@ namespace ShipABox.Clerk.BoxSender.Consumer
 
                     TimestampBoxLeftFacility = timestampBoxLeftFacility
                 });
+
 
             Console.WriteLine("Press enter to exit");
             Console.Write(">");

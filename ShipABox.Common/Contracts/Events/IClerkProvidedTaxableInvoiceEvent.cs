@@ -4,6 +4,15 @@ namespace ShipABox.Common.Contracts.Events
 {
     public interface IClerkProvidedTaxableInvoiceEvent
     {
+        /**
+         *  A common interface for events where the Clerk provides the
+         *  invoice to the Customer.
+         */
+
+
+        /**
+         *  All the properties required for this event to be useful.
+         */
         string CustomerName { get; }
         string AddressStreet { get; }
         string AddressCity { get; }

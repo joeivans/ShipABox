@@ -4,6 +4,15 @@ namespace ShipABox.Common.Contracts.Events
 {
     public interface IClerkProvidedTrackingNumberEvent
     {
+        /**
+         *  A common interface for events where the Clerk provides the
+         *  tracking number to the customer.
+         */
+
+
+        /**
+         *  All the properties required for this event to be useful.
+         */
         string CustomerName { get; }
         string AddressStreet { get; }
         string AddressCity { get; }
