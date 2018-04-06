@@ -4,6 +4,16 @@ namespace ShipABox.Common.Contracts.Events
 {
     public interface ICustomerCancelledInvoiceEvent
     {
+        /**
+         *  A common interface for events where the Customer, for
+         *  whatever reason, cancels the transaction and in turn does
+         *  not pay the invoice.
+         */
+
+
+        /**
+         *  All the properties required for this event to be useful.
+         */
         string CustomerName { get; }
         string AddressStreet { get; }
         string AddressCity { get; }
