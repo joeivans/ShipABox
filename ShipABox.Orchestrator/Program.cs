@@ -9,17 +9,42 @@ namespace ShipABox.Orchestrator
 {
     internal class Program
     {
+        /**
+         *  ShipABox.Orchestrator Saga Orchestrator.
+         *
+         *  Startup project order: 2
+         *
+         *  -   Facilitates our Saga.
+         */
+
+
         private static void Main(string[] args)
         {
             Console.Title = "(2) ShipABox.Orchestrator";
 
-            // create the state machine
+
+            /**
+             *  Create the state machine.
+             */
             var machine = new ShipmentSaga();
 
-            // repo
+
+            /**
+             *  The machine needs a repository.
+             *
+             *  In a real project, use:
+             *
+             *  new EntityFrameworkSagaRepository<ShipmentSagaState>();
+             *
+             *  See: http://masstransit-project.com/MassTransit/advanced/sagas/persistence.html
+             */
             var repo = new InMemorySagaRepository<ShipmentSagaState>();
 
-            // configure bus to receive DropBox messages on the orchestration queue
+
+            /**
+             *  Configure bus to receive DropBox messages on the
+             *  orchestration queue.
+             */
             var bus = Bus.Factory.CreateUsingRabbitMq(configure: busCfg =>
             {
                 var host = busCfg.Host(hostAddress: new Uri(uriString: Constants.Uri), configure: hst =>
@@ -39,14 +64,25 @@ namespace ShipABox.Orchestrator
                     });
             });
 
+
+            /**
+             *  Start the bus.
+             */
             bus.Start();
+
 
             Console.WriteLine("Saga is active.");
             Console.WriteLine("Press enter to exit");
             Console.Write(">");
             Console.ReadLine();
 
+
+            /**
+             *  Stop the bus.
+             */
             bus.Stop();
+
+
             Environment.Exit(exitCode: 0);
         }
     }

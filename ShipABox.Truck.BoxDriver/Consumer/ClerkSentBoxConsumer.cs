@@ -8,26 +8,41 @@ namespace ShipABox.Truck.BoxDriver.Consumer
     public class ClerkSentBoxConsumer :
         IConsumer<IClerkSentBoxEvent>
     {
-
         /**
          *  ClerkSentBoxConsumer
          *
          *  -   Defines how to consume the event's message.
          *
          *  -   Publishes another event when this microservice is done,
-         *      signaling the start of next unit of work for the next service.
+         *      signaling the start of next unit of work for the next
+         *      service.
          */
 
+
+        /**
+         *  Message template for console.
+         */
+        private const string StrOut = "Delivery completed: {0}";
+
+
+        /**
+         *  Required interface implementation.
+         */
         public async Task Consume(ConsumeContext<IClerkSentBoxEvent> context)
         {
-            // setup
+            /**
+             *  Setup.
+             */
             var driverId = new Guid();
             var truckId = new Guid();
             var timestampDeliverCompleted = DateTimeOffset.Now;
 
-            // console out to user
-            var strOut = "Delivery completed: {0}";
-            Console.WriteLine(strOut, timestampDeliverCompleted);
+
+            /**
+             *  Console out to user.
+             */
+            Console.WriteLine(StrOut, timestampDeliverCompleted);
+
 
             // publish event
             await context.Publish<ITruckDroveBoxEvent>(new
@@ -59,6 +74,7 @@ namespace ShipABox.Truck.BoxDriver.Consumer
                 TruckId = truckId,
                 TimestampDeliveryCompleted = timestampDeliverCompleted
             });
+
 
             Console.WriteLine("Press enter to exit");
             Console.Write(">");

@@ -4,6 +4,15 @@ namespace ShipABox.Common.Contracts.Events
 {
     public interface ITruckDroveBoxEvent
     {
+        /**
+         *  A common interface for events where the Truck drives the box
+         *  to its definition.
+         */
+
+
+        /**
+         *  All the properties required for this event to be useful.
+         */
         string CustomerName { get; }
         string AddressStreet { get; }
         string AddressCity { get; }

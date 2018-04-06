@@ -4,6 +4,15 @@ namespace ShipABox.Common.Contracts.Events
 {
     public interface ICustomerPayedInvoiceEvent
     {
+        /**
+         *  A common interface for events where the Customer pays the
+         *  invoice.
+         */
+
+
+        /**
+         *  All the properties required for this event to be useful.
+         */
         string CustomerName { get; }
         string AddressStreet { get; }
         string AddressCity { get; }

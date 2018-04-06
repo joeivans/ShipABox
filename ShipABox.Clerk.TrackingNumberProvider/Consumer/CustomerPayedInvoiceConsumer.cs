@@ -9,20 +9,32 @@ namespace ShipABox.Clerk.TrackingNumberProvider.Consumer
     public class CustomerPayedInvoiceConsumer :
         IConsumer<ICustomerPayedInvoiceEvent>
     {
-
         /**
          *  CustomerPayedInvoiceConsumer
          *
          *  -   Defines how to consume the event's message.
          *
          *  -   Publishes another event when this microservice is done,
-         *      signaling the start of next unit of work for the next service.
+         *      signaling the start of next unit of work for the next
+         *      service.
          */
 
+
+        /**
+         *  Message template for console.
+         */
+        private const string StrOut = "Tracking number: ${0}";
+
+
+        /**
+         *  Required interface implementation.
+         */
         public async Task Consume(
             ConsumeContext<ICustomerPayedInvoiceEvent> context)
         {
-            // setup
+            /**
+             *  Setup.
+             */
             var fake = new Faker();
             var trackingNumber = fake.Random.AlphaNumeric(21);
             var carrierId = fake.Random.Word();
@@ -30,11 +42,16 @@ namespace ShipABox.Clerk.TrackingNumberProvider.Consumer
             var timestampDeliveryExpected =
                 DateTimeOffset.Now.Date.AddDays(fake.Random.Int(1, 7));
 
-            // console out to user
-            var strOut = "Tracking number: ${0}";
-            Console.WriteLine(strOut, trackingNumber);
 
-            // publish event
+            /**
+             *  Console out to user.
+             */
+            Console.WriteLine(StrOut, trackingNumber);
+
+
+            /**
+             *  Publish event.
+             */
             await context.Publish<IClerkProvidedTrackingNumberEvent>(
                 new
                 {
@@ -63,6 +80,7 @@ namespace ShipABox.Clerk.TrackingNumberProvider.Consumer
                     TimestampTrackingCreated = timestampTrackingCreated,
                     TimestampDeliveryExpected = timestampDeliveryExpected
                 });
+
 
             Console.WriteLine("Press enter to exit");
             Console.Write(">");

@@ -2,15 +2,24 @@
 {
     public static class Constants
     {
-        // bus config
+        /**
+         *  This component creates a common kernel library for the
+         *  entire solution to use.
+         */
+
+
+        /**
+         *  Bus configuration.
+         */
         public const string Uri = "rabbitmq://localhost/shipabox/";
         public const string Username = "guest";
         public const string Password = "guest";
 
-        // queues
+
+        /**
+         *  Queue names.
+         */
         public const string OrchestratorQueue = "shipabox.orchestrator";
-        public const string BoxReceiverQueue = "shipabox.clerk.boxreceiver";
-//        public const string BoxDropperQueue = "shipabox.customer.boxdropper";
         public const string BoxWeigherQueue = "shipabox.clerk.boxweigher";
         public const string InvoiceProviderQueue = "shipabox.clerk.invoiceprovider";
         public const string InvoicePayerQueue = "shipabox.customer.invoicepayer";

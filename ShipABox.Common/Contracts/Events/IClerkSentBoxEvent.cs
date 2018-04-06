@@ -4,6 +4,15 @@ namespace ShipABox.Common.Contracts.Events
 {
     public interface IClerkSentBoxEvent
     {
+        /**
+         *  A common interface for events where the Clerk sends the box
+         *  to the back of the truck.
+         */
+
+
+        /**
+         *  All the properties required for this event to be useful.
+         */
         string CustomerName { get; }
         string AddressStreet { get; }
         string AddressCity { get; }

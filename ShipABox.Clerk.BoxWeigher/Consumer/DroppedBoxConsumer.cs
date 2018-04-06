@@ -9,20 +9,33 @@ namespace ShipABox.Clerk.BoxWeigher.Consumer
     public class DroppedBoxConsumer :
         IConsumer<IClerkReceivedBoxEvent>
     {
-
         /**
          *  DroppedBoxConsumer
          *
          *  -   Defines how to consume the event's message.
          *
          *  -   Publishes another event when this microservice is done,
-         *      signaling the start of next unit of work for the next service.
+         *      signaling the start of next unit of work for the next
+         *      service.
          */
 
+
+        /**
+         *  Message template for console.
+         */
+        private const string StrOut =
+            "Clerk weighed box at x:{0},y:{1},z:{2} weight: {3} {4}";
+
+
+        /**
+         *  Required interface implementation.
+         */
         public async Task Consume(
             ConsumeContext<IClerkReceivedBoxEvent> context)
         {
-            // setup
+            /**
+             *  Setup.
+             */
             var fake = new Faker();
             var boxDimensionsX = Math.Round(fake.Random.Double(5, 20), 2);
             var boxDimensionsY = Math.Round(fake.Random.Double(5, 20), 2);
@@ -30,13 +43,17 @@ namespace ShipABox.Clerk.BoxWeigher.Consumer
             var boxWeight = Math.Round(fake.Random.Double(1, 100), 2);
             var boxWeightUnit = "lbs";
 
-            // console out to user
-            var strOut = "Clerk weighed box at x:{0},y:{1},z:{2} " +
-                         "weight: {3} {4}";
-            Console.WriteLine(strOut, boxDimensionsX, boxDimensionsY,
+
+            /**
+             *  Console out to user.
+             */
+            Console.WriteLine(StrOut, boxDimensionsX, boxDimensionsY,
                 boxDimensionsZ, boxWeight, boxWeightUnit);
 
-            // publish event
+
+            /**
+             *  Publish event.
+             */
             await context.Publish<IClerkWeighedBoxEvent>(
                 new
                 {
@@ -54,6 +71,7 @@ namespace ShipABox.Clerk.BoxWeigher.Consumer
                     BoxWeight = boxWeight,
                     BoxWeightUnit = boxWeightUnit
                 });
+
 
             Console.WriteLine("Press enter to exit");
             Console.Write(">");

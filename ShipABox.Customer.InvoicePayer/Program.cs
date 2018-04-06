@@ -7,35 +7,44 @@ namespace ShipABox.Customer.InvoicePayer
 {
     internal class Program
     {
-
         /**
          *  Customer.InvoicePayer microservice
          *
-         *  -   Simulates a customer paying their invoice, based on the invoice
-         *      provided as previously determined by another microservice.
+         *  Startup project order: 5
+         *
+         *  -   Simulates a customer paying their invoice, based on the
+         *      invoice provided as previously determined by another
+         *      microservice.
          *
          *  -   This microservice responds to events of type
-         *      IClerkProvidedTaxableInvoiceEvent by subscribing a consumer
-         *      class of type ClerkProvidedTaxableInvoiceConsumer. See the
-         *      consumer class for the details.
+         *      IClerkProvidedTaxableInvoiceEvent by subscribing a
+         *      consumer class of type
+         *      ClerkProvidedTaxableInvoiceConsumer. See the consumer
+         *      class for the details.
          *
-         *  -   The last step in the consumer class's consume method is to
-         *      publish an event of type ICustomerPayedInvoiceEvent, which the
-         *      next microservice consumes.
+         *  -   The last step in the consumer class's consume method is
+         *      to publish an event of type ICustomerPayedInvoiceEvent,
+         *      which the next microservice consumes.
          *
          *  -   It's good to remind you that an event can have many
-         *      subscribers, therefore many microservices can consume the event,
-         *      and the saga orchestrator can also consume it as well.
+         *      subscribers, therefore many microservices can consume
+         *      the event, and the saga orchestrator can also consume it
+         *      as well.
          */
+
 
         private static void Main(string[] args)
         {
             Console.Title = "(5) Customer.InvoicePayer";
 
-            // get messages on this microservice's queue
+            /**
+             *  Get messages on this microservice's queue.
+             */
             var bus = Bus.Factory.CreateUsingRabbitMq(configure: busCfg =>
             {
-                // configure the host
+                /**
+                 *  Configure the host.
+                 */
                 var host = busCfg.Host(
                     hostAddress: new Uri(Constants.Uri),
                     configure: hst =>
@@ -44,10 +53,16 @@ namespace ShipABox.Customer.InvoicePayer
                         hst.Password(Constants.Password);
                     });
 
-                // get up to 8 messages at a time in case a backlog builds up
+
+                /**
+                 *  Get up to 8 messages at a time.
+                 */
                 busCfg.PrefetchCount = 8;
 
-                // subscribe a consumer to the endpoint
+
+                /**
+                 *  Subscribe a consumer to the endpoint.
+                 */
                 busCfg.ReceiveEndpoint(
                     host: host,
                     queueName: Constants.InvoicePayerQueue,
@@ -57,16 +72,25 @@ namespace ShipABox.Customer.InvoicePayer
                     });
             });
 
-            // start the bus
+
+            /**
+             *  Start the bus.
+             */
             bus.Start();
+
 
             Console.WriteLine("Ready to pay invoices.");
             Console.WriteLine("Press enter to exit");
             Console.Write(">");
             Console.ReadLine();
 
-            // stop the bus
+
+            /**
+             *  Stop the bus.
+             */
             bus.Stop();
+
+
             Environment.Exit(0);
         }
     }
